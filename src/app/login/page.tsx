@@ -25,7 +25,7 @@ export default function LoginPage() {
     // Simulate login
     setTimeout(() => {
       if (email && password) {
-        router.push("/");
+        router.push("/dashboard");
       } else {
         setError("Please fill in all fields");
       }

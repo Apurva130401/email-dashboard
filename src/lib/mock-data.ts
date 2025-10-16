@@ -73,6 +73,24 @@ export const mockEmails: Email[] = [
     processedAt: '2024-01-12T18:00:00Z',
     syncStatus: 'pending',
   },
+  {
+    id: '9',
+    sender: 'noreply@service.com',
+    subject: 'Service Notification',
+    body: 'Your service has been updated successfully.',
+    label: 'Service',
+    processedAt: '2024-01-11T15:30:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '10',
+    sender: 'noreply@notifications.com',
+    subject: 'Account Update',
+    body: 'Your account settings have been updated.',
+    label: 'Notification',
+    processedAt: '2024-01-11T12:00:00Z',
+    syncStatus: 'synced',
+  },
 ];
 
 export const mockLabelStats: LabelStats[] = [

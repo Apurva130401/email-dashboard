@@ -23,32 +23,32 @@ import Link from "next/link";
 const menuItems = [
   {
     title: "Email Analytics",
-    url: "/",
+    url: "/dashboard",
     icon: BarChart3,
   },
   {
     title: "Email Log Table",
-    url: "/logs",
+    url: "/dashboard/logs",
     icon: Mail,
   },
   {
     title: "Label Overview",
-    url: "/labels",
+    url: "/dashboard/labels",
     icon: Tag,
   },
   {
     title: "Integrations",
-    url: "/integrations",
+    url: "/dashboard/integrations",
     icon: LinkIcon,
   },
   {
     title: "CSV Viewer",
-    url: "/csv-viewer",
+    url: "/dashboard/csv-viewer",
     icon: FileText,
   },
   {
     title: "Settings",
-    url: "/settings",
+    url: "/dashboard/settings",
     icon: Settings,
   },
 ];
