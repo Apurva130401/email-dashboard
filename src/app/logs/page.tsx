@@ -13,7 +13,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Download, Mail, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Calendar, Download, Mail, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Eye } from "lucide-react";
 import { fetchEmails } from "@/lib/api";
 import { Email } from "@/lib/types";
 
@@ -40,6 +48,7 @@ export default function EmailLogsPage() {
   const [dateFilter, setDateFilter] = useState("");
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
   useEffect(() => {
     const loadEmails = async () => {
@@ -309,9 +318,67 @@ export default function EmailLogsPage() {
                       </div>
                     </TableCell>
                     <TableCell className="max-w-md">
-                      <div className="truncate text-sm text-muted-foreground" title={email.body}>
-                        {email.body}
-                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="h-auto p-0 text-left justify-start hover:bg-transparent"
+                            onClick={() => setSelectedEmail(email)}
+                          >
+                            <div className="truncate text-sm text-muted-foreground max-w-full" title={email.body}>
+                              {email.body}
+                            </div>
+                            <Eye className="h-3 w-3 ml-1 opacity-50" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                              <Mail className="h-5 w-5" />
+                              Email Summary
+                            </DialogTitle>
+                            <DialogDescription>
+                              Full summary of the processed email
+                            </DialogDescription>
+                          </DialogHeader>
+                          {selectedEmail && (
+                            <div className="space-y-4">
+                              <div className="grid gap-4">
+                                <div>
+                                  <label className="text-sm font-medium">From</label>
+                                  <p className="text-sm text-muted-foreground">{selectedEmail.sender}</p>
+                                </div>
+                                <div>
+                                  <label className="text-sm font-medium">Subject</label>
+                                  <p className="text-sm text-muted-foreground">{selectedEmail.subject}</p>
+                                </div>
+                                <div>
+                                  <label className="text-sm font-medium">Label</label>
+                                  <Badge variant="outline">{selectedEmail.label}</Badge>
+                                </div>
+                                <div>
+                                  <label className="text-sm font-medium">Status</label>
+                                  <Badge variant={getStatusBadgeVariant(selectedEmail.syncStatus)}>
+                                    {selectedEmail.syncStatus}
+                                  </Badge>
+                                </div>
+                                <div>
+                                  <label className="text-sm font-medium">Processed Date</label>
+                                  <p className="text-sm text-muted-foreground">
+                                    {new Date(selectedEmail.processedAt).toLocaleString()}
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium">Full Summary</label>
+                                <div className="mt-2 p-4 bg-muted rounded-lg">
+                                  <p className="text-sm whitespace-pre-wrap">{selectedEmail.body}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </DialogContent>
+                      </Dialog>
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">{email.label}</Badge>
