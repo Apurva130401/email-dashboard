@@ -108,7 +108,7 @@ export default function EmailLogsPage() {
       });
     }
 
-    // Apply sorting
+    // Apply sorting Apply
     result = sortEmails(result, sortField, sortDirection);
 
     setFilteredEmails(result);
