@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "title": "Configuración",
+    "description": "Gestiona tu cuenta, conexiones y preferencias",
+    "account": {
+      "title": "Configuración de Cuenta",
+      "profile": {
+        "title": "Información del Perfil",
+        "description": "Actualiza tu información personal y detalles del perfil",
+        "name": "Nombre Completo",
+        "email": "Dirección de Correo",
+        "bio": "Biografía",
+        "save": "Guardar Perfil"
+      }
+    },
+    "connections": {
+      "title": "Conexiones de Correo",
+      "gmail": {
+        "title": "Conector de Gmail",
+        "description": "Conecta tu cuenta de Gmail para acceder y procesar tus correos",
+        "connected": "Gmail Conectado",
+        "connect": "Conectar Gmail",
+        "connecting": "Conectando...",
+        "disconnect": "Desconectar",
+        "active": "Activo",
+        "lastSync": "Última sincronización",
+        "ago": "atrás",
+        "processed": "Correos Procesados",
+        "successRate": "Tasa de Éxito de Sincronización",
+        "labels": "Etiquetas Creadas",
+        "noConnection": "No hay Cuenta de Correo Conectada",
+        "noConnectionDesc": "Conecta tu cuenta de Gmail para comenzar a procesar y organizar tus correos automáticamente.",
+        "secure": "Otorga acceso seguro a tu bandeja de entrada de Gmail. Solo leeremos y organizaremos tus correos - nunca enviaremos en tu nombre."
+      }
+    },
+    "preferences": {
+      "title": "Preferencias",
+      "notifications": {
+        "title": "Notificaciones y Sincronización",
+        "description": "Configura cómo recibes actualizaciones y cuándo ocurre la sincronización",
+        "email": "Notificaciones por Correo",
+        "emailDesc": "Recibe actualizaciones sobre el estado de procesamiento",
+        "autoSync": "Sincronización Automática",
+        "autoSyncDesc": "Sincroniza automáticamente nuevos correos",
+        "enabled": "Habilitado",
+        "disabled": "Deshabilitado",
+        "save": "Guardar Preferencias"
+      },
+      "appearance": {
+        "title": "Apariencia",
+        "description": "Personaliza el aspecto de tu panel de control",
+        "theme": "Tema",
+        "language": "Idioma"
+      }
+    },
+    "data": {
+      "title": "Gestión de Datos",
+      "export": {
+        "title": "Exportación e Importación de Datos",
+        "description": "Descarga tus datos o importa desde otros servicios",
+        "export": "Exportar Datos",
+        "import": "Importar Datos"
+      }
+    },
+    "danger": {
+      "title": "Zona de Peligro",
+      "critical": {
+        "title": "Acciones Críticas",
+        "description": "Acciones irreversibles que afectan tu cuenta y datos",
+        "reset": "Restablecer Todos los Datos",
+        "resetDesc": "Borra todos los correos procesados, etiquetas y datos analíticos",
+        "delete": "Eliminar Cuenta",
+        "deleteDesc": "Elimina permanentemente tu cuenta y todos los datos asociados"
+      }
+    }
+  }
+}

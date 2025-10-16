@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez votre compte, connexions et préférences",
+    "account": {
+      "title": "Paramètres du Compte",
+      "profile": {
+        "title": "Informations du Profil",
+        "description": "Mettez à jour vos informations personnelles et détails du profil",
+        "name": "Nom Complet",
+        "email": "Adresse Email",
+        "bio": "Biographie",
+        "save": "Enregistrer le Profil"
+      }
+    },
+    "connections": {
+      "title": "Connexions Email",
+      "gmail": {
+        "title": "Connecteur Gmail",
+        "description": "Connectez votre compte Gmail pour accéder et traiter vos emails",
+        "connected": "Gmail Connecté",
+        "connect": "Connecter Gmail",
+        "connecting": "Connexion...",
+        "disconnect": "Déconnecter",
+        "active": "Actif",
+        "lastSync": "Dernière synchronisation",
+        "ago": "il y a",
+        "processed": "Emails Traités",
+        "successRate": "Taux de Réussite de Synchronisation",
+        "labels": "Étiquettes Créées",
+        "noConnection": "Aucun Compte Email Connecté",
+        "noConnectionDesc": "Connectez votre compte Gmail pour commencer à traiter et organiser vos emails automatiquement.",
+        "secure": "Accordez un accès sécurisé à votre boîte de réception Gmail. Nous ne lirons et organiserons que vos emails - jamais envoyer en votre nom."
+      }
+    },
+    "preferences": {
+      "title": "Préférences",
+      "notifications": {
+        "title": "Notifications et Synchronisation",
+        "description": "Configurez comment vous recevez les mises à jour et quand la synchronisation se produit",
+        "email": "Notifications Email",
+        "emailDesc": "Recevez des mises à jour sur le statut de traitement",
+        "autoSync": "Synchronisation Automatique",
+        "autoSyncDesc": "Synchronisez automatiquement les nouveaux emails",
+        "enabled": "Activé",
+        "disabled": "Désactivé",
+        "save": "Enregistrer les Préférences"
+      },
+      "appearance": {
+        "title": "Apparence",
+        "description": "Personnalisez l'apparence de votre tableau de bord",
+        "theme": "Thème",
+        "language": "Langue"
+      }
+    },
+    "data": {
+      "title": "Gestion des Données",
+      "export": {
+        "title": "Exportation et Importation des Données",
+        "description": "Téléchargez vos données ou importez depuis d'autres services",
+        "export": "Exporter les Données",
+        "import": "Importer les Données"
+      }
+    },
+    "danger": {
+      "title": "Zone Dangereuse",
+      "critical": {
+        "title": "Actions Critiques",
+        "description": "Actions irréversibles qui affectent votre compte et vos données",
+        "reset": "Réinitialiser Toutes les Données",
+        "resetDesc": "Effacez tous les emails traités, étiquettes et données analytiques",
+        "delete": "Supprimer le Compte",
+        "deleteDesc": "Supprimez définitivement votre compte et toutes les données associées"
+      }
+    }
+  }
+}

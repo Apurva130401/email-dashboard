@@ -1,0 +1,97 @@
+import { Email, LabelStats, AnalyticsStats, IntegrationStatus } from './types';
+
+export const mockEmails: Email[] = [
+  {
+    id: '1',
+    sender: 'john.doe@example.com',
+    subject: 'Project Update Meeting',
+    body: 'Hi team, let\'s schedule a meeting to discuss the latest project updates.',
+    label: 'Work',
+    processedAt: '2024-01-15T10:30:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '2',
+    sender: 'newsletter@technews.com',
+    subject: 'Weekly Tech Digest',
+    body: 'This week\'s top stories in technology and innovation.',
+    label: 'Newsletter',
+    processedAt: '2024-01-15T09:15:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '3',
+    sender: 'support@bank.com',
+    subject: 'Account Security Alert',
+    body: 'We detected unusual activity on your account.',
+    label: 'Security',
+    processedAt: '2024-01-14T16:45:00Z',
+    syncStatus: 'pending',
+  },
+  {
+    id: '4',
+    sender: 'friend@email.com',
+    subject: 'Weekend Plans',
+    body: 'Hey! Want to catch up this weekend?',
+    label: 'Personal',
+    processedAt: '2024-01-14T14:20:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '5',
+    sender: 'marketing@company.com',
+    subject: 'Special Offer Inside',
+    body: 'Don\'t miss our limited-time promotion!',
+    label: 'Marketing',
+    processedAt: '2024-01-13T11:00:00Z',
+    syncStatus: 'failed',
+  },
+  {
+    id: '6',
+    sender: 'boss@work.com',
+    subject: 'Quarterly Review',
+    body: 'Please prepare for your quarterly performance review.',
+    label: 'Work',
+    processedAt: '2024-01-13T08:30:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '7',
+    sender: 'updates@github.com',
+    subject: 'Repository Activity',
+    body: 'Recent commits and pull requests in your repositories.',
+    label: 'Development',
+    processedAt: '2024-01-12T20:15:00Z',
+    syncStatus: 'synced',
+  },
+  {
+    id: '8',
+    sender: 'family@group.com',
+    subject: 'Family Reunion',
+    body: 'Planning our annual family reunion this summer.',
+    label: 'Personal',
+    processedAt: '2024-01-12T18:00:00Z',
+    syncStatus: 'pending',
+  },
+];
+
+export const mockLabelStats: LabelStats[] = [
+  { label: 'Work', count: 2, percentage: 25 },
+  { label: 'Personal', count: 2, percentage: 25 },
+  { label: 'Newsletter', count: 1, percentage: 12.5 },
+  { label: 'Security', count: 1, percentage: 12.5 },
+  { label: 'Marketing', count: 1, percentage: 12.5 },
+  { label: 'Development', count: 1, percentage: 12.5 },
+];
+
+export const mockAnalyticsStats: AnalyticsStats = {
+  totalEmails: 8,
+  totalLabels: 6,
+  syncedEmails: 5,
+  failedSyncs: 1,
+};
+
+export const mockIntegrationStatus: IntegrationStatus = {
+  googleSheets: 'connected',
+  notion: 'syncing',
+};

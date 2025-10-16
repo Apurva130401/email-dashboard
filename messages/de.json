@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Verwalten Sie Ihr Konto, Verbindungen und Einstellungen",
+    "account": {
+      "title": "Kontoeinstellungen",
+      "profile": {
+        "title": "Profilinformationen",
+        "description": "Aktualisieren Sie Ihre persönlichen Informationen und Profildetails",
+        "name": "Vollständiger Name",
+        "email": "E-Mail-Adresse",
+        "bio": "Biografie",
+        "save": "Profil Speichern"
+      }
+    },
+    "connections": {
+      "title": "E-Mail-Verbindungen",
+      "gmail": {
+        "title": "Gmail-Connector",
+        "description": "Verbinden Sie Ihr Gmail-Konto, um auf Ihre E-Mails zuzugreifen und diese zu verarbeiten",
+        "connected": "Gmail Verbunden",
+        "connect": "Gmail Verbinden",
+        "connecting": "Verbinde...",
+        "disconnect": "Trennen",
+        "active": "Aktiv",
+        "lastSync": "Letzte Synchronisation",
+        "ago": "vor",
+        "processed": "Verarbeitete E-Mails",
+        "successRate": "Synchronisationserfolgsrate",
+        "labels": "Erstellte Labels",
+        "noConnection": "Kein E-Mail-Konto Verbunden",
+        "noConnectionDesc": "Verbinden Sie Ihr Gmail-Konto, um automatisch mit der Verarbeitung und Organisation Ihrer E-Mails zu beginnen.",
+        "secure": "Gewähren Sie sicheren Zugriff auf Ihren Gmail-Posteingang. Wir lesen und organisieren nur Ihre E-Mails - niemals in Ihrem Namen senden."
+      }
+    },
+    "preferences": {
+      "title": "Einstellungen",
+      "notifications": {
+        "title": "Benachrichtigungen und Synchronisation",
+        "description": "Konfigurieren Sie, wie Sie Updates erhalten und wann die Synchronisation erfolgt",
+        "email": "E-Mail-Benachrichtigungen",
+        "emailDesc": "Erhalten Sie Updates zum Verarbeitungsstatus",
+        "autoSync": "Automatische Synchronisation",
+        "autoSyncDesc": "Synchronisieren Sie neue E-Mails automatisch",
+        "enabled": "Aktiviert",
+        "disabled": "Deaktiviert",
+        "save": "Einstellungen Speichern"
+      },
+      "appearance": {
+        "title": "Erscheinungsbild",
+        "description": "Passen Sie das Aussehen Ihres Dashboards an",
+        "theme": "Thema",
+        "language": "Sprache"
+      }
+    },
+    "data": {
+      "title": "Datenverwaltung",
+      "export": {
+        "title": "Datenexport und -import",
+        "description": "Laden Sie Ihre Daten herunter oder importieren Sie von anderen Diensten",
+        "export": "Daten Exportieren",
+        "import": "Daten Importieren"
+      }
+    },
+    "danger": {
+      "title": "Gefahrenzone",
+      "critical": {
+        "title": "Kritische Aktionen",
+        "description": "Unumkehrbare Aktionen, die Ihr Konto und Ihre Daten betreffen",
+        "reset": "Alle Daten Zurücksetzen",
+        "resetDesc": "Löscht alle verarbeiteten E-Mails, Labels und Analysedaten",
+        "delete": "Konto Löschen",
+        "deleteDesc": "Löscht Ihr Konto und alle zugehörigen Daten dauerhaft"
+      }
+    }
+  }
+}

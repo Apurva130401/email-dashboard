@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account, connections, and preferences",
+    "account": {
+      "title": "Account Settings",
+      "profile": {
+        "title": "Profile Information",
+        "description": "Update your personal information and profile details",
+        "name": "Full Name",
+        "email": "Email Address",
+        "bio": "Bio",
+        "save": "Save Profile"
+      }
+    },
+    "connections": {
+      "title": "Email Connections",
+      "gmail": {
+        "title": "Gmail Connector",
+        "description": "Connect your Gmail account to access and process your emails",
+        "connected": "Gmail Connected",
+        "connect": "Connect Gmail",
+        "connecting": "Connecting...",
+        "disconnect": "Disconnect",
+        "active": "Active",
+        "lastSync": "Last sync",
+        "ago": "ago",
+        "processed": "Emails Processed",
+        "successRate": "Sync Success Rate",
+        "labels": "Labels Created",
+        "noConnection": "No Email Account Connected",
+        "noConnectionDesc": "Connect your Gmail account to start processing and organizing your emails automatically.",
+        "secure": "Grant secure access to your Gmail inbox. We'll only read and organize your emails - never send on your behalf."
+      }
+    },
+    "preferences": {
+      "title": "Preferences",
+      "notifications": {
+        "title": "Notifications & Sync",
+        "description": "Configure how you receive updates and when sync happens",
+        "email": "Email Notifications",
+        "emailDesc": "Receive updates about processing status",
+        "autoSync": "Auto Sync",
+        "autoSyncDesc": "Automatically sync new emails",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "save": "Save Preferences"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "description": "Customize the look and feel of your dashboard",
+        "theme": "Theme",
+        "language": "Language"
+      }
+    },
+    "data": {
+      "title": "Data Management",
+      "export": {
+        "title": "Data Export & Import",
+        "description": "Download your data or import from other services",
+        "export": "Export Data",
+        "import": "Import Data"
+      }
+    },
+    "danger": {
+      "title": "Danger Zone",
+      "critical": {
+        "title": "Critical Actions",
+        "description": "Irreversible actions that affect your account and data",
+        "reset": "Reset All Data",
+        "resetDesc": "Clear all processed emails, labels, and analytics data",
+        "delete": "Delete Account",
+        "deleteDesc": "Permanently delete your account and all associated data"
+      }
+    }
+  }
+}
