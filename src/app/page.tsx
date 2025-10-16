@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart } from "recharts";
 import { fetchAnalyticsStats, fetchLabelStats, fetchEmails } from "@/lib/api";
 import { AnalyticsStats, LabelStats, Email } from "@/lib/types";
-import { TrendingUp, TrendingDown, Mail, Tag, CheckCircle, AlertTriangle, Users } from "lucide-react";
+import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users } from "lucide-react";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 

@@ -61,8 +61,8 @@ export default function EmailLogsPage() {
     if (!field || !direction) return emails;
 
     return [...emails].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (field) {
         case 'sender':
@@ -140,7 +140,7 @@ export default function EmailLogsPage() {
     document.body.removeChild(link);
   };
 
-  const handleOpenInGmail = (emailId: string) => {
+  const handleOpenInGmail = (_emailId: string) => {
     // This would ideally use the Message ID to construct a Gmail URL
     // For now, we'll open Gmail's inbox
     window.open('https://mail.google.com/mail/u/0/#inbox', '_blank');
