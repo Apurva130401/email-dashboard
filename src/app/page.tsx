@@ -6,10 +6,10 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart } from "recharts";
 import { fetchAnalyticsStats, fetchLabelStats, fetchEmails } from "@/lib/api";
 import { AnalyticsStats, LabelStats, Email } from "@/lib/types";
-import { TrendingUp, TrendingDown, Mail, Tag, CheckCircle, AlertTriangle, Clock, Users } from "lucide-react";
+import { TrendingUp, TrendingDown, Mail, Tag, CheckCircle, AlertTriangle, Users } from "lucide-react";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
@@ -129,7 +129,7 @@ export default function EmailAnalyticsPage() {
 
   // Calculate additional metrics
   const syncRate = stats.totalEmails > 0 ? Math.round((stats.syncedEmails / stats.totalEmails) * 100) : 0;
-  const failureRate = stats.totalEmails > 0 ? Math.round((stats.failedSyncs / stats.totalEmails) * 100) : 0;
+  // const failureRate = stats.totalEmails > 0 ? Math.round((stats.failedSyncs / stats.totalEmails) * 100) : 0;
   const pendingEmails = stats.totalEmails - stats.syncedEmails - stats.failedSyncs;
 
   // Calculate processing trends (mock data for demonstration)

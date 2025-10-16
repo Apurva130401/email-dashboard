@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,7 +51,7 @@ export default function SettingsPage() {
     language: "en",
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleProfileSave = () => {
     // Simulate save action
@@ -76,7 +77,7 @@ export default function SettingsPage() {
     console.log("Preferences saved:", preferences);
   };
 
-  if (loading) {
+  if (false) {
     return (
       <div className="space-y-8">
         {/* Header Skeleton */}
@@ -339,9 +340,11 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                      <img
+                      <Image
                         src="https://cdn-icons-png.flaticon.com/128/5968/5968534.png"
                         alt="Gmail"
+                        width={20}
+                        height={20}
                         className="h-5 w-5"
                       />
                     </div>
@@ -387,9 +390,11 @@ export default function SettingsPage() {
 
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <img
+                    <Image
                       src="https://cdn-icons-png.flaticon.com/128/5968/5968534.png"
                       alt="Gmail"
+                      width={32}
+                      height={32}
                       className="h-8 w-8"
                     />
                   </div>
@@ -409,9 +414,11 @@ export default function SettingsPage() {
                       </>
                     ) : (
                       <>
-                        <img
+                        <Image
                           src="https://cdn-icons-png.flaticon.com/128/5968/5968534.png"
                           alt="Gmail"
+                          width={16}
+                          height={16}
                           className="h-4 w-4 mr-2"
                         />
                         {t('connections.gmail.connect')}
