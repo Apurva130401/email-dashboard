@@ -149,7 +149,7 @@ export default function EmailLogsPage() {
     document.body.removeChild(link);
   };
 
-  const handleOpenInGmail = (_emailId: string) => {
+  const handleOpenInGmail = () => {
     // This would ideally use the Message ID to construct a Gmail URL
     // For now, we'll open Gmail's inbox
     window.open('https://mail.google.com/mail/u/0/#inbox', '_blank');
@@ -395,7 +395,7 @@ export default function EmailLogsPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleOpenInGmail(email.id)}
+                        onClick={() => handleOpenInGmail()}
                         className="h-8 w-8 p-0"
                         title="Open in Gmail"
                       >
