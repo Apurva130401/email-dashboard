@@ -5,19 +5,97 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart } from "recharts";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { fetchAnalyticsStats, fetchLabelStats, fetchEmails } from "@/lib/api";
 import { AnalyticsStats, LabelStats, Email } from "@/lib/types";
-import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users } from "lucide-react";
+import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users, BarChart as BarChartIcon, Clock, Inbox, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#00C49F'];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+    },
+  },
+};
+
+const SkeletonLoader = () => (
+  <div className="space-y-8 p-8">
+    <div className="flex flex-col space-y-2">
+      <div className="h-10 bg-muted/50 rounded-lg w-96 animate-pulse"></div>
+      <div className="h-6 bg-muted/50 rounded w-80 animate-pulse"></div>
+    </div>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="h-40 rounded-xl bg-muted/50 animate-pulse"></div>
+      ))}
+    </div>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="lg:col-span-2 h-96 rounded-xl bg-muted/50 animate-pulse"></div>
+      <div className="h-96 rounded-xl bg-muted/50 animate-pulse"></div>
+    </div>
+    <div className="h-64 rounded-xl bg-muted/50 animate-pulse"></div>
+  </div>
+);
 
 export default function EmailAnalyticsPage() {
   const [stats, setStats] = useState<AnalyticsStats | null>(null);
   const [labelStats, setLabelStats] = useState<LabelStats[]>([]);
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
+  const [isDrafting, setIsDrafting] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleGenerateReply = async (email: Email) => {
+    setSelectedEmail(email);
+    setIsDialogOpen(true);
+    setIsDrafting(true);
+    try {
+      const response = await fetch('/api/draft', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subject: email.subject, sender: email.sender, content: email.body }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate draft');
+      }
+
+      const generatedDraft = await response.json();
+      setDraft(generatedDraft);
+    } catch (error) {
+      console.error("Failed to generate draft:", error);
+      // Handle error state in the dialog
+    } finally {
+      setIsDrafting(false);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -41,98 +119,16 @@ export default function EmailAnalyticsPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="space-y-8">
-        {/* Header Skeleton */}
-        <div className="flex flex-col space-y-2">
-          <div className="h-10 bg-gradient-to-r from-blue-200 to-purple-200 rounded-lg animate-pulse w-96" />
-          <div className="h-6 bg-muted rounded animate-pulse w-80" />
-        </div>
-
-        {/* Key Metrics Skeleton */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="relative overflow-hidden rounded-lg border bg-card p-6">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded animate-pulse w-24" />
-                  <div className="h-8 bg-muted rounded animate-pulse w-16" />
-                  <div className="h-3 bg-muted rounded animate-pulse w-20" />
-                </div>
-                <div className="h-4 w-4 bg-muted rounded animate-pulse" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Charts Skeleton */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="rounded-lg border bg-card p-6">
-              <div className="space-y-4">
-                <div className="h-6 bg-muted rounded animate-pulse w-48" />
-                <div className="h-4 bg-muted rounded animate-pulse w-64" />
-                <div className="h-80 bg-muted rounded animate-pulse" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Processing Trends Skeleton */}
-        <div className="rounded-lg border bg-card p-6">
-          <div className="space-y-4">
-            <div className="h-6 bg-muted rounded animate-pulse w-40" />
-            <div className="h-4 bg-muted rounded animate-pulse w-56" />
-            <div className="h-72 bg-muted rounded animate-pulse" />
-          </div>
-        </div>
-
-        {/* Top Senders Skeleton */}
-        <div className="rounded-lg border bg-card p-6">
-          <div className="space-y-4">
-            <div className="h-6 bg-muted rounded animate-pulse w-32" />
-            <div className="h-4 bg-muted rounded animate-pulse w-48" />
-            <div className="space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-muted rounded-full animate-pulse" />
-                  <div className="space-y-2 flex-1">
-                    <div className="h-4 bg-muted rounded animate-pulse w-32" />
-                    <div className="h-3 bg-muted rounded animate-pulse w-24" />
-                  </div>
-                  <div className="h-6 bg-muted rounded animate-pulse w-12" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Stats Skeleton */}
-        <div className="grid gap-4 md:grid-cols-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="rounded-lg border bg-card p-6">
-              <div className="space-y-2">
-                <div className="h-4 bg-muted rounded animate-pulse w-32" />
-                <div className="h-8 bg-muted rounded animate-pulse w-16" />
-                <div className="h-3 bg-muted rounded animate-pulse w-28" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <SkeletonLoader />;
   }
 
   if (!stats) {
     return <div className="flex items-center justify-center h-64">Failed to load data</div>;
   }
 
-  // Calculate additional metrics
   const syncRate = stats.totalEmails > 0 ? Math.round((stats.syncedEmails / stats.totalEmails) * 100) : 0;
-  // const failureRate = stats.totalEmails > 0 ? Math.round((stats.failedSyncs / stats.totalEmails) * 100) : 0;
   const pendingEmails = stats.totalEmails - stats.syncedEmails - stats.failedSyncs;
 
-  // Calculate processing trends (mock data for demonstration)
   const processingTrend = [
     { day: 'Mon', processed: 12 },
     { day: 'Tue', processed: 19 },
@@ -143,290 +139,428 @@ export default function EmailAnalyticsPage() {
     { day: 'Sun', processed: 6 },
   ];
 
-  // Top senders
-  const senderStats = emails.reduce((acc, email) => {
-    acc[email.sender] = (acc[email.sender] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const topSenders = Object.entries(senderStats)
-    .sort(([,a], [,b]) => b - a)
+  const topSenders = Object.entries(
+    emails.reduce((acc, email) => {
+      acc[email.sender] = (acc[email.sender] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>)
+  )
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
-    .map(([sender, count], index) => ({ sender: sender.split('@')[0], count, id: `${sender}-${index}` }));
+    .map(([sender, count]) => ({ sender, count, id: sender }));
+
+  const emailCategories = labelStats.map(label => ({
+    category: label.label,
+    count: label.count
+  }));
+
+  const avgProcessingTime = emails.length > 0 ? (
+    emails.reduce((acc, email) => acc + (email.processingTime || 0), 0) / emails.length
+  ).toFixed(2) : 0;
 
   return (
-    <div className="space-y-8">
+    <motion.div
+      className="space-y-8 p-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="aurora-background">
+        <div className="aurora-shape1"></div>
+        <div className="aurora-shape2"></div>
+        <div className="aurora-shape3"></div>
+      </div>
+
       {/* Header */}
-      <div className="flex flex-col space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <motion.div variants={itemVariants} className="flex flex-col space-y-2">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
           Email Analytics Dashboard
         </h1>
         <p className="text-muted-foreground text-lg">
-          Comprehensive overview of your email processing and automation metrics
+          A comprehensive overview of your email processing and automation metrics.
         </p>
-      </div>
+      </motion.div>
 
       {/* Key Metrics Overview */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-bl-3xl" />
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Emails</CardTitle>
-            <Mail className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.totalEmails}</div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" />
-              Processed this month
-            </p>
-          </CardContent>
-        </Card>
+      <motion.div variants={containerVariants} className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Emails</CardTitle>
+              <Mail className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{stats.totalEmails}</div>
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <TrendingUp className="h-3 w-3" />
+                Processed this month
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/10 rounded-bl-3xl" />
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sync Success Rate</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{syncRate}%</div>
-            <Progress value={syncRate} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {stats.syncedEmails} of {stats.totalEmails} emails
-            </p>
-          </CardContent>
-        </Card>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Sync Success Rate</CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{syncRate}%</div>
+              <Progress value={syncRate} className="mt-2" />
+              <p className="text-xs text-muted-foreground mt-1">
+                {stats.syncedEmails} of {stats.totalEmails} emails
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-orange-500/10 rounded-bl-3xl" />
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Labels Assigned</CardTitle>
-            <Tag className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.totalLabels}</div>
-            <p className="text-xs text-muted-foreground">
-              Unique categories
-            </p>
-            <div className="flex flex-wrap gap-1 mt-2">
-              {labelStats.slice(0, 3).map((label) => (
-                <Badge key={label.label} variant="secondary" className="text-xs">
-                  {label.label}
-                </Badge>
-              ))}
-              {labelStats.length > 3 && (
-                <Badge variant="outline" className="text-xs">
-                  +{labelStats.length - 3} more
-                </Badge>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Labels Assigned</CardTitle>
+              <Tag className="h-4 w-4 text-accent" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{stats.totalLabels}</div>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {labelStats.slice(0, 3).map((label) => (
+                  <Badge key={label.label} variant="secondary" className="text-xs">
+                    {label.label}
+                  </Badge>
+                ))}
+                {labelStats.length > 3 && (
+                  <Badge variant="outline" className="text-xs">
+                    +{labelStats.length - 3} more
+                  </Badge>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-3xl" />
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Issues Detected</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.failedSyncs + pendingEmails}</div>
-            <p className="text-xs text-muted-foreground">
-              Failed: {stats.failedSyncs} | Pending: {pendingEmails}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Issues Detected</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{stats.failedSyncs + pendingEmails}</div>
+              <p className="text-xs text-muted-foreground">
+                Failed: {stats.failedSyncs} | Pending: {pendingEmails}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       {/* Alerts */}
-      {stats.failedSyncs > 0 && (
-        <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Sync Issues Detected</AlertTitle>
-          <AlertDescription>
-            {stats.failedSyncs} emails failed to sync. Please check your integration settings and try again.
-          </AlertDescription>
-        </Alert>
-      )}
+      <AnimatePresence>
+        {stats.failedSyncs > 0 && (
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            <Alert className="glass-card border-destructive/50 text-destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sync Issues Detected</AlertTitle>
+              <AlertDescription>
+                {stats.failedSyncs} emails failed to sync. Please check your integration settings.
+              </AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Charts Section */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Label Distribution
-            </CardTitle>
-            <CardDescription>
-              Breakdown of emails by AI-generated labels
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                count: {
-                  label: "Count",
-                },
-              }}
-              className="h-[350px]"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={labelStats}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ label, percentage }) => `${label} (${percentage}%)`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {labelStats.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+      <motion.div variants={containerVariants} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div variants={itemVariants} className="lg:col-span-2">
+          <Card className="glass-card h-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChartIcon className="h-5 w-5" />
+                Label Performance
+              </CardTitle>
+              <CardDescription>
+                Number of emails per label category
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={{}} className="h-[350px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={labelStats} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                    <XAxis dataKey="label" stroke="var(--color-muted-foreground)" />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <RechartsTooltip
+                      cursor={{ fill: 'var(--color-accent-foreground)', opacity: 0.1 }}
+                      contentStyle={{ 
+                        background: 'var(--color-popover)', 
+                        borderColor: 'var(--color-border)', 
+                        color: 'var(--color-popover-foreground)' 
+                      }}
+                    />
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                      {labelStats.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card h-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Label Distribution
+              </CardTitle>
+              <CardDescription>
+                Breakdown of emails by AI-generated labels
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={{}} className="h-[350px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={labelStats}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={100}
+                      fill="var(--color-primary)"
+                      dataKey="count"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {labelStats.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <RechartsTooltip
+                      contentStyle={{
+                        background: 'var(--color-popover)',
+                        borderColor: 'var(--color-border)',
+                        color: 'var(--color-popover-foreground)'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
+
+      {/* Recent Activity */}
+      <motion.div variants={itemVariants}>
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart className="h-5 w-5" />
-              Label Performance
+              <Inbox className="h-5 w-5" />
+              Recent Activity
             </CardTitle>
             <CardDescription>
-              Number of emails per label category with performance indicators
+              A log of the most recently processed emails.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer
-              config={{
-                count: {
-                  label: "Count",
-                },
-              }}
-              className="h-[350px]"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={labelStats} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey="label" />
-                  <YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="count" fill="#8884d8" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Sender</TableHead>
+                  <TableHead>Subject</TableHead>
+                  <TableHead>Label</TableHead>
+                  <TableHead>Actions</TableHead>
+                  <TableHead className="text-right">Time</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {emails.slice(0, 5).map((email) => (
+                  <TableRow key={email.id}>
+                    <TableCell className="font-medium">{email.sender}</TableCell>
+                    <TableCell>{email.subject}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{email.label}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="icon" onClick={() => handleGenerateReply(email)}>
+                        <Sparkles className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                    <TableCell className="text-right text-muted-foreground">
+                      {new Date(email.timestamp).toLocaleTimeString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
+
+      {/* More Analytics */}
+      <motion.div variants={containerVariants} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Top Senders
+              </CardTitle>
+              <CardDescription>
+                Emails received from top senders
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {topSenders.map((sender) => (
+                  <div key={sender.id} className="flex items-center">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{sender.sender}</p>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{sender.count} emails</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Tag className="h-5 w-5" />
+                Email Categories
+              </CardTitle>
+              <CardDescription>
+                Breakdown of emails by category
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={{}} className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={emailCategories} dataKey="count" nameKey="category" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
+                      {emailCategories.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <RechartsTooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Avg. Processing Time
+              </CardTitle>
+              <CardDescription>
+                Average time to process an email
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{avgProcessingTime}s</div>
+              <p className="text-xs text-muted-foreground">Based on the last 100 emails</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       {/* Processing Trends */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            Processing Trends
-          </CardTitle>
-          <CardDescription>
-            Email processing activity over the past week
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={{
-              processed: {
-                label: "Processed",
-              },
-            }}
-            className="h-[300px]"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={processingTrend}>
-                <XAxis dataKey="day" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Area
-                  type="monotone"
-                  dataKey="processed"
-                  stroke="#8884d8"
-                  fill="#8884d8"
-                  fillOpacity={0.3}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      {/* Top Senders */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Mail className="h-5 w-5" />
-            Top Senders
-          </CardTitle>
-          <CardDescription>
-            Most active email senders in your inbox
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {topSenders.map((sender, index) => (
-              <div key={sender.id} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
-                    {index + 1}
-                  </div>
-                  <div>
-                    <p className="font-medium">{sender.sender}</p>
-                    <p className="text-sm text-muted-foreground">{sender.count} emails</p>
-                  </div>
-                </div>
-                <Badge variant="outline">{sender.count}</Badge>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Stats Summary */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Average Processing Time</CardTitle>
+      <motion.div variants={itemVariants}>
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Processing Trends
+            </CardTitle>
+            <CardDescription>
+              Email processing activity over the past week
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2.3s</div>
-            <p className="text-xs text-muted-foreground">Per email</p>
+            <ChartContainer config={{}} className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={processingTrend} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorProcessed" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="day" stroke="var(--color-muted-foreground)" />
+                  <YAxis stroke="var(--color-muted-foreground)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                  <RechartsTooltip 
+                    contentStyle={{
+                      background: 'var(--color-popover)',
+                      borderColor: 'var(--color-border)',
+                      color: 'var(--color-popover-foreground)'
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="processed"
+                    stroke="var(--color-primary)"
+                    fillOpacity={1}
+                    fill="url(#colorProcessed)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
+      </motion.div>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Automation Rate</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">94%</div>
-            <p className="text-xs text-muted-foreground">Emails auto-processed</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Data Quality Score</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">A+</div>
-            <p className="text-xs text-muted-foreground">Label accuracy</p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[625px]">
+          <DialogHeader>
+            <DialogTitle>Draft Reply</DialogTitle>
+            <DialogDescription>
+              AI-generated draft for your reply. You can edit it before sending.
+            </DialogDescription>
+          </DialogHeader>
+          {isDrafting ? (
+            <div className="flex items-center justify-center h-48">
+              <p>Generating draft...</p>
+            </div>
+          ) : draft ? (
+            <div className="grid gap-4 py-4">
+              <Input
+                id="subject"
+                value={draft.subject}
+                onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
+              />
+              <Textarea
+                id="body"
+                value={draft.body}
+                onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                className="min-h-[200px]"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-48">
+              <p>Failed to generate draft. Please try again.</p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button type="submit">Send Reply</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </motion.div>
   );
 }

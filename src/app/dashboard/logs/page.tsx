@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Calendar, Download, Mail, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Eye } from "lucide-react";
+import { Calendar, Download, Mail, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Eye, Sparkles } from "lucide-react";
 import { fetchEmails } from "@/lib/api";
 import { Email } from "@/lib/types";
 
@@ -49,6 +49,9 @@ export default function EmailLogsPage() {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
+  const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
+  const [draftError, setDraftError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadEmails = async () => {
@@ -129,11 +132,11 @@ export default function EmailLogsPage() {
     const csvContent = [
       headers.join(','),
       ...filteredEmails.map(email => [
-        `"${email.sender}"`,
-        `"${email.subject}"`,
-        `"${email.body}"`,
-        `"${email.label}"`,
-        `"${email.syncStatus}"`,
+        `"${email.sender}"`, 
+        `"${email.subject}"`, 
+        `"${email.body}"`, 
+        `"${email.label}"`, 
+        `"${email.syncStatus}"`, 
         `"${new Date(email.processedAt).toLocaleDateString()}"`
       ].join(','))
     ].join('\n');
@@ -153,6 +156,37 @@ export default function EmailLogsPage() {
     // This would ideally use the Message ID to construct a Gmail URL
     // For now, we'll open Gmail's inbox
     window.open('https://mail.google.com/mail/u/0/#inbox', '_blank');
+  };
+
+  const handleGenerateDraft = async (email: Email) => {
+    setIsGeneratingDraft(true);
+    setDraft(null);
+    setDraftError(null);
+    try {
+      const response = await fetch('/api/draft', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: email.sender,
+          subject: email.subject,
+          content: email.body,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate draft');
+      }
+
+      const draftData = await response.json();
+      setDraft(draftData);
+    } catch (error) {
+      setDraftError('Failed to generate draft. Please try again.');
+      console.error("Error generating draft:", error);
+    } finally {
+      setIsGeneratingDraft(false);
+    }
   };
 
   const handleSort = (field: SortField) => {
@@ -318,67 +352,13 @@ export default function EmailLogsPage() {
                       </div>
                     </TableCell>
                     <TableCell className="max-w-md">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className="h-auto p-0 text-left justify-start hover:bg-transparent"
-                            onClick={() => setSelectedEmail(email)}
-                          >
-                            <div className="truncate text-sm text-muted-foreground max-w-full" title={email.body}>
-                              {email.body}
-                            </div>
-                            <Eye className="h-3 w-3 ml-1 opacity-50" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
-                              <Mail className="h-5 w-5" />
-                              Email Summary
-                            </DialogTitle>
-                            <DialogDescription>
-                              Full summary of the processed email
-                            </DialogDescription>
-                          </DialogHeader>
-                          {selectedEmail && (
-                            <div className="space-y-4">
-                              <div className="grid gap-4">
-                                <div>
-                                  <label className="text-sm font-medium">From</label>
-                                  <p className="text-sm text-muted-foreground">{selectedEmail.sender}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium">Subject</label>
-                                  <p className="text-sm text-muted-foreground">{selectedEmail.subject}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium">Label</label>
-                                  <Badge variant="outline">{selectedEmail.label}</Badge>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium">Status</label>
-                                  <Badge variant={getStatusBadgeVariant(selectedEmail.syncStatus)}>
-                                    {selectedEmail.syncStatus}
-                                  </Badge>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium">Processed Date</label>
-                                  <p className="text-sm text-muted-foreground">
-                                    {new Date(selectedEmail.processedAt).toLocaleString()}
-                                  </p>
-                                </div>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium">Full Summary</label>
-                                <div className="mt-2 p-4 bg-muted rounded-lg">
-                                  <p className="text-sm whitespace-pre-wrap">{selectedEmail.body}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </DialogContent>
-                      </Dialog>
+                      <div 
+                        className="truncate text-sm text-muted-foreground cursor-pointer hover:text-foreground"
+                        onClick={() => setSelectedEmail(email)}
+                        title={email.body}
+                      >
+                        {email.body}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">{email.label}</Badge>
@@ -401,6 +381,16 @@ export default function EmailLogsPage() {
                       >
                         <ExternalLink className="h-4 w-4" />
                       </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleGenerateDraft(email)}
+                        className="h-8 w-8 p-0"
+                        title="Generate Draft"
+                        disabled={isGeneratingDraft}
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -414,6 +404,88 @@ export default function EmailLogsPage() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!selectedEmail} onOpenChange={() => setSelectedEmail(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              Email Summary
+            </DialogTitle>
+            <DialogDescription>
+              Full summary of the processed email
+            </DialogDescription>
+          </DialogHeader>
+          {selectedEmail && (
+            <div className="space-y-4">
+              <div className="grid gap-4">
+                <div>
+                  <label className="text-sm font-medium">From</label>
+                  <p className="text-sm text-muted-foreground">{selectedEmail.sender}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Subject</label>
+                  <p className="text-sm text-muted-foreground">{selectedEmail.subject}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Label</label>
+                  <Badge variant="outline">{selectedEmail.label}</Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Status</label>
+                  <Badge variant={getStatusBadgeVariant(selectedEmail.syncStatus)}>
+                    {selectedEmail.syncStatus}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Processed Date</label>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(selectedEmail.processedAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Full Summary</label>
+                <div className="mt-2 p-4 bg-muted rounded-lg">
+                  <p className="text-sm whitespace-pre-wrap">{selectedEmail.body}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!draft || !!draftError} onOpenChange={() => { setDraft(null); setDraftError(null); }}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              AI Generated Draft
+            </DialogTitle>
+            <DialogDescription>
+              Here is a draft generated by AI. You can copy the content.
+            </DialogDescription>
+          </DialogHeader>
+          {isGeneratingDraft && <div className="flex items-center justify-center h-32">Generating...</div>}
+          {draftError && <div className="text-red-500">{draftError}</div>}
+          {draft && (
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Subject</label>
+                <Input value={draft.subject} readOnly />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Body</label>
+                <textarea
+                  value={draft.body}
+                  readOnly
+                  className="w-full h-64 p-2 border rounded"
+                />
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

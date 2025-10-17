@@ -17,8 +17,10 @@ import {
   Settings,
   Link as LinkIcon,
   FileText,
+  Bot,
 } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const menuItems = [
   {
@@ -47,6 +49,11 @@ const menuItems = [
     icon: FileText,
   },
   {
+    title: "Nina AI",
+    url: "/dashboard/nina",
+    icon: Bot,
+  },
+  {
     title: "Settings",
     url: "/dashboard/settings",
     icon: Settings,
@@ -55,21 +62,27 @@ const menuItems = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="glass-card !border-r-border/50 !bg-sidebar/80">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Email Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <motion.div
+                  key={item.title}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </motion.div>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
