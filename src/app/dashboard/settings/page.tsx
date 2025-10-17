@@ -425,7 +425,7 @@ export default function SettingsPage() {
                   <Button
                     onClick={handleGmailConnect}
                     disabled={isConnecting}
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                   >
                     {isConnecting ? (
                       <>
@@ -547,7 +547,7 @@ export default function SettingsPage() {
                   <Button
                     onClick={handleCalendarConnect}
                     disabled={isCalendarConnecting}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                   >
                     {isCalendarConnecting ? (
                       <>
