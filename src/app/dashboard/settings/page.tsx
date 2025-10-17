@@ -46,6 +46,10 @@ export default function SettingsPage() {
   const [gmailEmail, setGmailEmail] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
 
+  const [calendarConnected, setCalendarConnected] = useState(false);
+  const [calendarEmail, setCalendarEmail] = useState("");
+  const [isCalendarConnecting, setIsCalendarConnecting] = useState(false);
+
   const [preferences, setPreferences] = useState({
     notifications: true,
     autoSync: true,
@@ -72,6 +76,21 @@ export default function SettingsPage() {
   const handleGmailDisconnect = () => {
     setGmailConnected(false);
     setGmailEmail("");
+  };
+
+  const handleCalendarConnect = async () => {
+    setIsCalendarConnecting(true);
+    // Simulate OAuth flow
+    setTimeout(() => {
+      setCalendarConnected(true);
+      setCalendarEmail("john.doe@gmail.com");
+      setIsCalendarConnecting(false);
+    }, 2000);
+  };
+
+  const handleCalendarDisconnect = () => {
+    setCalendarConnected(false);
+    setCalendarEmail("");
   };
 
   const handlePreferencesSave = () => {
@@ -423,6 +442,128 @@ export default function SettingsPage() {
                           className="h-4 w-4 mr-2"
                         />
                         {t('connections.gmail.connect')}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Google Calendar Integration */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Image
+                src="https://cdn-icons-png.flaticon.com/512/5968/5968499.png"
+                alt="Google Calendar"
+                width={20}
+                height={20}
+                className="h-5 w-5"
+              />
+              Google Calendar
+            </CardTitle>
+            <CardDescription>
+              Sync your email events and deadlines to Google Calendar for better time management
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {calendarConnected ? (
+              <div className="space-y-4">
+                <Alert className="border-green-200 bg-green-50">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertTitle className="text-green-800">Connected to Google Calendar</AlertTitle>
+                  <AlertDescription className="text-green-700">
+                    Successfully connected to {calendarEmail}. Your events are being synced.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Image
+                        src="https://cdn-icons-png.flaticon.com/512/5968/5968499.png"
+                        alt="Google Calendar"
+                        width={20}
+                        height={20}
+                        className="h-5 w-5"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-medium">{calendarEmail}</p>
+                      <p className="text-sm text-muted-foreground">Connected • Last sync: 2 minutes ago</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      Active
+                    </Badge>
+                    <Button variant="outline" size="sm" onClick={handleCalendarDisconnect}>
+                      Disconnect
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">47</div>
+                    <p className="text-sm text-muted-foreground">Events synced</p>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">12</div>
+                    <p className="text-sm text-muted-foreground">Upcoming events</p>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-purple-600">98.2%</div>
+                    <p className="text-sm text-muted-foreground">Sync success rate</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Alert>
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>Not Connected</AlertTitle>
+                  <AlertDescription>
+                    Connect your Google Calendar to automatically sync email events and deadlines.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Image
+                      src="https://cdn-icons-png.flaticon.com/512/5968/5968499.png"
+                      alt="Google Calendar"
+                      width={32}
+                      height={32}
+                      className="h-8 w-8"
+                    />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">Google Calendar</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Sync your email events, deadlines, and important dates to Google Calendar for better organization.
+                  </p>
+                  <Button
+                    onClick={handleCalendarConnect}
+                    disabled={isCalendarConnecting}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isCalendarConnecting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Connecting...
+                      </>
+                    ) : (
+                      <>
+                        <Image
+                          src="https://cdn-icons-png.flaticon.com/512/5968/5968499.png"
+                          alt="Google Calendar"
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 mr-2"
+                        />
+                        Connect Calendar
                       </>
                     )}
                   </Button>
