@@ -22,6 +22,7 @@ import {
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   {
@@ -72,19 +73,29 @@ const menuItems = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
-    <Sidebar className="glass-card !border-r-border/50 !bg-sidebar/80">
-      <SidebarContent>
+    <Sidebar className="!border-r-border/50 !bg-gray-900 text-white">
+      <SidebarContent className="p-4">
         <SidebarGroup>
-          <SidebarGroupLabel>Email Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg uppercase font-semibold tracking-wide text-gray-400 mt-4 mb-2 px-3">
+            Email Dashboard
+          </SidebarGroupLabel>
+          <div className="border-b border-gray-700 mb-2"></div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                  <SidebarMenuButton
+                    asChild
+                    className={`hover:bg-gray-800 transition-all duration-200 hover:scale-105 rounded-lg my-1 hover:text-white ${
+                      pathname === item.url ? "bg-gray-800 border-l-4 border-primary" : ""
+                    }`}
+                  >
+                    <Link href={item.url} className="flex items-center p-3">
+                      <item.icon className="w-5 h-5 mr-3" />
+                      <span className="font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

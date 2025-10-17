@@ -425,7 +425,7 @@ export default function SettingsPage() {
                   <Button
                     onClick={handleGmailConnect}
                     disabled={isConnecting}
-                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    className="w-full md:w-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                   >
                     {isConnecting ? (
                       <>
@@ -433,16 +433,7 @@ export default function SettingsPage() {
                         {t('connections.gmail.connecting')}
                       </>
                     ) : (
-                      <>
-                        <Image
-                          src="https://cdn-icons-png.flaticon.com/128/5968/5968534.png"
-                          alt="Gmail"
-                          width={16}
-                          height={16}
-                          className="h-4 w-4 mr-2"
-                        />
-                        {t('connections.gmail.connect')}
-                      </>
+                      <span className="font-semibold">Connect Gmail Account</span>
                     )}
                   </Button>
                 </div>
@@ -547,7 +538,7 @@ export default function SettingsPage() {
                   <Button
                     onClick={handleCalendarConnect}
                     disabled={isCalendarConnecting}
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    className="w-full md:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                   >
                     {isCalendarConnecting ? (
                       <>
@@ -555,16 +546,7 @@ export default function SettingsPage() {
                         Connecting...
                       </>
                     ) : (
-                      <>
-                        <Image
-                          src="https://cdn-icons-png.flaticon.com/512/5968/5968499.png"
-                          alt="Google Calendar"
-                          width={16}
-                          height={16}
-                          className="h-4 w-4 mr-2"
-                        />
-                        Connect Calendar
-                      </>
+                      <span className="font-semibold">Connect Google Calendar</span>
                     )}
                   </Button>
                 </div>

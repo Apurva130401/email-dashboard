@@ -91,11 +91,11 @@ export default async function DashboardLayout({
             <SidebarProvider>
               <AppSidebar />
               <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4 backdrop-blur-sm bg-background/20">
+                <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border/50 px-4 backdrop-blur-sm bg-background/60">
                   <SidebarTrigger className="-ml-1" />
                   <div className="flex-1" />
                 </header>
-                <main className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-6 lg:p-8">
+                <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
                   <Suspense fallback={<LoadingScreen />}>
                     {children}
                   </Suspense>
