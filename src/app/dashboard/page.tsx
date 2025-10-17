@@ -155,7 +155,7 @@ export default function EmailAnalyticsPage() {
   }));
 
   const avgProcessingTime = emails.length > 0 ? (
-    emails.reduce((acc, email) => acc + (email.processingTime || 0), 0) / emails.length
+    emails.reduce((acc, email) => acc + (0), 0) / emails.length
   ).toFixed(2) : 0;
 
   return (
@@ -396,7 +396,7 @@ export default function EmailAnalyticsPage() {
                       </Button>
                     </TableCell>
                     <TableCell className="text-right text-muted-foreground">
-                      {new Date(email.timestamp).toLocaleTimeString()}
+                      {new Date(email.processedAt).toLocaleTimeString()}
                     </TableCell>
                   </TableRow>
                 ))}
