@@ -30,6 +30,7 @@ export const fetchEmails = async (): Promise<Email[]> => {
             subject: String(row['Subject'] || ''),
             body: String(row['Summary'] || ''),
             label: String(row['Label'] || 'Unlabeled'),
+            category: (row['Category'] as Email['category']) || 'inbox',
             processedAt: String(row['Processed At'] || row['Timestamp'] || new Date().toISOString()),
             syncStatus: (row['Sync Status'] as Email['syncStatus']) || 'synced',
           }));

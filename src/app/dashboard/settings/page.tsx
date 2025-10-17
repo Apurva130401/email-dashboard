@@ -25,7 +25,8 @@ import {
   Settings as SettingsIcon,
   Bell,
   Palette,
-  Globe
+  Globe,
+  CreditCard
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -568,6 +569,58 @@ export default function SettingsPage() {
                 {t('data.export.import')}
               </Button>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Billing */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <CreditCard className="h-5 w-5 text-blue-600" />
+          <h2 className="text-2xl font-semibold">Billing</h2>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Subscription & Billing
+            </CardTitle>
+            <CardDescription>
+              Manage your subscription plan and billing information
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Current Plan: Pro Plan</p>
+                <p className="text-sm text-muted-foreground">$29/month • Next billing: Nov 15, 2024</p>
+              </div>
+              <Button variant="outline">
+                Manage Billing
+              </Button>
+            </div>
+
+            <Separator />
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">1,247</div>
+                <p className="text-sm text-muted-foreground">Emails processed</p>
+              </div>
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-green-600">98.5%</div>
+                <p className="text-sm text-muted-foreground">Success rate</p>
+              </div>
+              <div className="text-center p-4 border rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">2.4GB</div>
+                <p className="text-sm text-muted-foreground">Storage used</p>
+              </div>
+            </div>
+
+            <Button className="w-full">
+              View Full Billing Dashboard
+            </Button>
           </CardContent>
         </Card>
       </div>

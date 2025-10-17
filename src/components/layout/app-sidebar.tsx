@@ -18,9 +18,10 @@ import {
   Link as LinkIcon,
   FileText,
   Bot,
+  CreditCard,
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 const menuItems = [
   {
@@ -29,9 +30,14 @@ const menuItems = [
     icon: BarChart3,
   },
   {
-    title: "Email Log Table",
+    title: "Mailbox",
     url: "/dashboard/logs",
     icon: Mail,
+  },
+  {
+    title: "Calendar",
+    url: "/dashboard/calendar",
+    icon: Calendar,
   },
   {
     title: "Label Overview",
@@ -54,6 +60,11 @@ const menuItems = [
     icon: Bot,
   },
   {
+    title: "Billing",
+    url: "/dashboard/billing",
+    icon: CreditCard,
+  },
+  {
     title: "Settings",
     url: "/dashboard/settings",
     icon: Settings,
@@ -69,20 +80,14 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <motion.div
-                  key={item.title}
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </motion.div>
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

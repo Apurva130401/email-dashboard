@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { fetchAnalyticsStats, fetchLabelStats, fetchEmails } from "@/lib/api";
 import { AnalyticsStats, LabelStats, Email } from "@/lib/types";
-import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users, BarChart as BarChartIcon, Clock, Inbox, Sparkles } from "lucide-react";
+import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users, BarChart as BarChartIcon, Clock, Inbox, Sparkles, MousePointerClick } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#00C49F'];
@@ -60,6 +60,44 @@ const SkeletonLoader = () => (
   </div>
 );
 
+const MailboxStats = ({ stats }: { stats: { inbox: number; sent: number; outbox: number } }) => (
+  <motion.div variants={containerVariants} className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-3">
+    <motion.div variants={itemVariants}>
+      <Card className="glass-card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Inbox</CardTitle>
+          <Inbox className="h-4 w-4 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{stats.inbox}</div>
+        </CardContent>
+      </Card>
+    </motion.div>
+    <motion.div variants={itemVariants}>
+      <Card className="glass-card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Sent</CardTitle>
+          <Mail className="h-4 w-4 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{stats.sent}</div>
+        </CardContent>
+      </Card>
+    </motion.div>
+    <motion.div variants={itemVariants}>
+      <Card className="glass-card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Outbox</CardTitle>
+          <Mail className="h-4 w-4 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{stats.outbox}</div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </motion.div>
+);
+
 export default function EmailAnalyticsPage() {
   const [stats, setStats] = useState<AnalyticsStats | null>(null);
   const [labelStats, setLabelStats] = useState<LabelStats[]>([]);
@@ -69,6 +107,7 @@ export default function EmailAnalyticsPage() {
   const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
   const [isDrafting, setIsDrafting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [engagementRate, setEngagementRate] = useState({ openRate: 0, clickRate: 0, unsubscribeRate: 0 });
 
   const handleGenerateReply = async (email: Email) => {
     setSelectedEmail(email);
@@ -118,6 +157,18 @@ export default function EmailAnalyticsPage() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    const fetchEngagementData = async () => {
+      // Mock data for now
+      const mockEngagementData = {
+        openRate: 0.25, // 25%
+        clickRate: 0.08, // 8%
+        unsubscribeRate: 0.01, // 1%
+      };
+      setEngagementRate(mockEngagementData);
+    };
+    fetchEngagementData();
+  }, []);
   if (loading) {
     return <SkeletonLoader />;
   }
@@ -254,6 +305,9 @@ export default function EmailAnalyticsPage() {
           </Card>
         </motion.div>
       </motion.div>
+
+      {/* Mailbox Stats */}
+      <MailboxStats stats={{ inbox: stats.totalEmails, sent: stats.syncedEmails, outbox: pendingEmails }} />
 
       {/* Alerts */}
       <AnimatePresence>

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const draft = await generateEmailReply({ id: '', sender, subject, body: content, label: '', processedAt: '', syncStatus: 'pending' });
+    const draft = await generateEmailReply({ id: '', sender, subject, body: content, label: '', category: 'outbox', processedAt: '', syncStatus: 'pending' });
     return NextResponse.json(draft);
   } catch (error) {
     console.error('Error generating draft:', error);

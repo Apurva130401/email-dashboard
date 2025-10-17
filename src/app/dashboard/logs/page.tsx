@@ -46,8 +46,9 @@ export default function EmailLogsPage() {
   const [filteredEmails, setFilteredEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateFilter, setDateFilter] = useState("");
-  const [sortField, setSortField] = useState<SortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'inbox' | 'sent' | 'outbox'>('all');
+  const [sortField, setSortField] = useState<SortField | null>('processedAt');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
@@ -112,19 +113,24 @@ export default function EmailLogsPage() {
   useEffect(() => {
     let result = emails;
 
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      result = result.filter(email => email.category === categoryFilter);
+    }
+
     // Apply date filter
     if (dateFilter) {
-      result = emails.filter(email => {
+      result = result.filter(email => {
         const emailDate = new Date(email.processedAt).toISOString().split('T')[0];
         return emailDate === dateFilter;
       });
     }
 
-    // Apply sorting Apply
+    // Apply sorting
     result = sortEmails(result, sortField, sortDirection);
 
     setFilteredEmails(result);
-  }, [dateFilter, emails, sortField, sortDirection]);
+  }, [dateFilter, categoryFilter, emails, sortField, sortDirection]);
 
   const handleDownloadExcel = () => {
     // Convert emails to CSV format for Excel
@@ -225,7 +231,7 @@ export default function EmailLogsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Email Logs</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Mailbox</h1>
           <p className="text-muted-foreground">
             Comprehensive view of all processed emails with summaries and actions
           </p>
@@ -246,6 +252,12 @@ export default function EmailLogsPage() {
         <CardContent>
           <div className="flex gap-4 items-center">
             <div className="flex items-center gap-2">
+              <Button variant={categoryFilter === 'all' ? 'secondary' : 'ghost'} onClick={() => setCategoryFilter('all')}>All</Button>
+              <Button variant={categoryFilter === 'inbox' ? 'secondary' : 'ghost'} onClick={() => setCategoryFilter('inbox')}>Inbox</Button>
+              <Button variant={categoryFilter === 'sent' ? 'secondary' : 'ghost'} onClick={() => setCategoryFilter('sent')}>Sent</Button>
+              <Button variant={categoryFilter === 'outbox' ? 'secondary' : 'ghost'} onClick={() => setCategoryFilter('outbox')}>Outbox</Button>
+            </div>
+            <div className="flex items-center gap-2 ml-auto">
               <Calendar className="h-4 w-4" />
               <Input
                 type="date"

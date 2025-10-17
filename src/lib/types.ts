@@ -4,6 +4,7 @@ export interface Email {
   subject: string;
   body: string;
   label: string;
+  category: 'inbox' | 'sent' | 'outbox';
   processedAt: string;
   syncStatus: 'synced' | 'pending' | 'failed';
 }
