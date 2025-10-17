@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SyncFlo Email Assistant",
   description: "AI-powered email analytics and automation dashboard",
+  icons: {
+    icon: "/favicon.jpg",
+  },
 };
 
 export default async function RootLayout({
