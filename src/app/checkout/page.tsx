@@ -7,10 +7,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CreditCard, Landmark, Mail, Sparkles, CheckCircle, ShoppingCart } from "lucide-react";
+import { CreditCard, Landmark, Mail, Sparkles, CheckCircle, ShoppingCart, ArrowRight, ArrowLeft } from "lucide-react";
 
 const CheckoutPage: React.FC = () => {
+  const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("card");
+
+  const steps = [
+    { id: 1, title: "Order Summary", icon: ShoppingCart },
+    { id: 2, title: "Billing Info", icon: Mail },
+    { id: 3, title: "Payment", icon: CreditCard }
+  ];
+
+  const handleNext = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   const handlePayment = () => {
     if (paymentMethod === "razorpay") {
@@ -21,77 +40,25 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen flex">
-      {/* Left side - Hero section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-12 flex-col justify-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
-        <div className="relative z-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl mb-8 border border-white/20">
-            <ShoppingCart className="h-10 w-10 text-white" />
-          </div>
-          <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-            Complete Your<br />
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              SyncFlo Mail Agent
-            </span><br />
-            Purchase
-          </h1>
-          <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-            Secure checkout for your AI-powered email management solution. Get started in minutes.
-          </p>
-          <div className="flex items-center space-x-6 text-slate-400">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>Secure Payment</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-blue-400" />
-              <span>Instant Activation</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-12 left-12 right-12">
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
-                <Sparkles className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-white font-medium">Premium Features</p>
-                <p className="text-slate-400 text-sm">Advanced AI email processing and automation</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right side - Checkout form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-white">
-        <div className="w-full max-w-2xl space-y-8">
-          {/* Header */}
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Secure Checkout</h2>
-            <p className="text-slate-600">Complete your purchase below</p>
-          </div>
-
-          {/* Order Summary */}
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center text-slate-900">
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Order Summary
               </CardTitle>
+              <CardDescription>Review your purchase</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-slate-700">SyncFlo Mail Agent Pro</span>
+                <div className="flex justify-between items-center p-4 border border-slate-200 rounded-lg">
+                  <div>
+                    <h3 className="font-semibold text-slate-900">SyncFlo Mail Agent Pro</h3>
+                    <p className="text-sm text-slate-600">Monthly subscription</p>
+                  </div>
                   <span className="font-semibold text-slate-900">$29.99/month</span>
                 </div>
                 <div className="border-t pt-4">
@@ -103,8 +70,9 @@ const CheckoutPage: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Billing Information */}
+        );
+      case 2:
+        return (
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-slate-900">Billing Information</CardTitle>
@@ -141,8 +109,9 @@ const CheckoutPage: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Payment Method */}
+        );
+      case 3:
+        return (
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-slate-900">Payment Method</CardTitle>
@@ -150,7 +119,7 @@ const CheckoutPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 border border-slate-200 rounded-lg hover:border-purple-300 transition-colors">
+                <div className="flex items-center space-x-3 p-4 border border-slate-200 rounded-lg hover:border-blue-300 transition-colors">
                   <RadioGroupItem value="card" id="card" />
                   <Label htmlFor="card" className="flex items-center cursor-pointer flex-1">
                     <CreditCard className="mr-3 h-5 w-5 text-slate-600" />
@@ -160,7 +129,7 @@ const CheckoutPage: React.FC = () => {
                     </div>
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 border border-slate-200 rounded-lg hover:border-purple-300 transition-colors">
+                <div className="flex items-center space-x-3 p-4 border border-slate-200 rounded-lg hover:border-blue-300 transition-colors">
                   <RadioGroupItem value="razorpay" id="razorpay" />
                   <Label htmlFor="razorpay" className="flex items-center cursor-pointer flex-1">
                     <Landmark className="mr-3 h-5 w-5 text-slate-600" />
@@ -193,21 +162,90 @@ const CheckoutPage: React.FC = () => {
 
               <Button
                 onClick={handlePayment}
-                className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
+                className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
               >
                 <CheckCircle className="mr-2 h-5 w-5" />
                 Complete Purchase - $29.99
               </Button>
             </CardContent>
           </Card>
+        );
+      default:
+        return null;
+    }
+  };
 
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-slate-600 flex items-center justify-center gap-1">
-              <Sparkles className="h-3 w-3" />
-              Secure checkout powered by industry-standard encryption
-            </p>
+  return (
+    <div className="min-h-screen bg-slate-50 py-12 px-4">
+      <div className="container mx-auto max-w-4xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Checkout</h1>
+          <p className="text-slate-600">Complete your SyncFlo Mail Agent purchase</p>
+        </div>
+
+        {/* Step Indicator */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center space-x-4">
+            {steps.map((step, index) => (
+              <React.Fragment key={step.id}>
+                <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 ${
+                  currentStep >= step.id
+                    ? 'bg-blue-600 border-blue-600 text-white'
+                    : 'border-slate-300 text-slate-400'
+                }`}>
+                  <step.icon className="h-5 w-5" />
+                </div>
+                <div className="hidden sm:block">
+                  <p className={`text-sm font-medium ${
+                    currentStep >= step.id ? 'text-slate-900' : 'text-slate-500'
+                  }`}>
+                    {step.title}
+                  </p>
+                </div>
+                {index < steps.length - 1 && (
+                  <div className={`w-12 h-0.5 ${
+                    currentStep > step.id ? 'bg-blue-600' : 'bg-slate-300'
+                  }`} />
+                )}
+              </React.Fragment>
+            ))}
           </div>
+        </div>
+
+        {/* Step Content */}
+        <div className="mb-8">
+          {renderStepContent()}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex justify-between">
+          <Button
+            onClick={handlePrevious}
+            disabled={currentStep === 1}
+            variant="outline"
+            className="flex items-center"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Previous
+          </Button>
+          {currentStep < 3 ? (
+            <Button
+              onClick={handleNext}
+              className="bg-blue-600 hover:bg-blue-700 flex items-center"
+            >
+              Next
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : null}
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-8">
+          <p className="text-sm text-slate-600 flex items-center justify-center gap-1">
+            <Sparkles className="h-3 w-3" />
+            Secure checkout powered by industry-standard encryption
+          </p>
         </div>
       </div>
     </div>
