@@ -22,7 +22,7 @@ const TermsOfService: React.FC = () => {
           <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-2xl">
             <CardContent className="p-8 text-slate-700 space-y-6">
               <p>
-                Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the SyncFlo Mail Agent website and services (the "Service") operated by SyncFlo ("us", "we", or "our").
+                Please read these Terms of Service (&quot;Terms&quot;, &quot;Terms of Service&quot;) carefully before using the SyncFlo Mail Agent website and services (the &quot;Service&quot;) operated by SyncFlo (&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;).
               </p>
               <p>
                 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.
