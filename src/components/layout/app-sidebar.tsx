@@ -70,6 +70,11 @@ const menuItems = [
     url: "/dashboard/settings",
     icon: Settings,
   },
+  {
+    title: "Pricing",
+    url: "/pricing",
+    icon: CreditCard,
+  },
 ];
 
 export function AppSidebar() {
