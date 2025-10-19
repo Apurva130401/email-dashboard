@@ -62,22 +62,64 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-pink-50 p-4">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-orange-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+    <div className="min-h-screen flex">
+      {/* Left side - Hero section */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        <div className="relative z-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl mb-8 border border-white/20">
+            <Mail className="h-10 w-10 text-white" />
+          </div>
+          <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
+            Welcome to<br />
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              SyncFlo Mail Agent
+            </span>
+          </h1>
+          <p className="text-xl text-slate-300 mb-8 leading-relaxed">
+            Join thousands of users managing emails smarter with AI-powered automation.
+          </p>
+          <div className="flex items-center space-x-6 text-slate-400">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Smart Categorization</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+              <span>Automated Responses</span>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-12 left-12 right-12">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-medium">AI-Powered Features</p>
+                <p className="text-slate-400 text-sm">Advanced email intelligence and automation</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-md">
+      {/* Right side - Signup form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-white">
+        <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl mb-4 shadow-lg">
             <Mail className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent mb-2">
-            SyncFlo Email Assistant
+            SyncFlo Mail Agent
           </h1>
           <p className="text-muted-foreground text-lg">
             Join thousands of users managing emails smarter.
@@ -86,7 +128,7 @@ export default function SignupPage() {
 
         <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-2xl">
           <CardHeader className="space-y-1 pb-6">
-            <CardTitle className="text-2xl font-semibold text-center">Create Account</CardTitle>
+            <CardTitle className="text-2xl font-semibold text-center text-slate-900">Create Account</CardTitle>
             <CardDescription className="text-center">
               Get started with your email automation journey
             </CardDescription>
@@ -96,7 +138,7 @@ export default function SignupPage() {
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-sm font-medium">
+                  <Label htmlFor="firstName" className="text-sm font-medium text-slate-900">
                     First Name
                   </Label>
                   <div className="relative">
@@ -113,7 +155,7 @@ export default function SignupPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-sm font-medium">
+                  <Label htmlFor="lastName" className="text-sm font-medium text-slate-900">
                     Last Name
                   </Label>
                   <div className="relative">
@@ -132,7 +174,7 @@ export default function SignupPage() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
+                <Label htmlFor="email" className="text-sm font-medium text-slate-900">
                   Email Address
                 </Label>
                 <div className="relative">
@@ -151,7 +193,7 @@ export default function SignupPage() {
 
               {/* Password Fields */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
+                <Label htmlFor="password" className="text-sm font-medium text-slate-900">
                   Password
                 </Label>
                 <div className="relative">
@@ -176,7 +218,7 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-900">
                   Confirm Password
                 </Label>
                 <div className="relative">
@@ -211,11 +253,11 @@ export default function SignupPage() {
                 <div className="text-sm">
                   <label htmlFor="terms" className="text-muted-foreground cursor-pointer">
                     I agree to the{" "}
-                    <a href="#" className="text-purple-600 hover:text-purple-500 font-medium">
+                    <a href="/terms" className="text-purple-600 hover:text-purple-500 font-medium">
                       Terms of Service
                     </a>{" "}
                     and{" "}
-                    <a href="#" className="text-purple-600 hover:text-purple-500 font-medium">
+                    <a href="/privacy-policy" className="text-purple-600 hover:text-purple-500 font-medium">
                       Privacy Policy
                     </a>
                   </label>
@@ -260,6 +302,7 @@ export default function SignupPage() {
             Powered by AI for smarter email management
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -34,36 +34,65 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+    <div className="min-h-screen flex">
+      {/* Left side - Hero section */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        <div className="relative z-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl mb-8 border border-white/20">
+            <Mail className="h-10 w-10 text-white" />
+          </div>
+          <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
+            Welcome Back to<br />
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              SyncFlo Mail Agent
+            </span>
+          </h1>
+          <p className="text-xl text-slate-300 mb-8 leading-relaxed">
+            Your AI-powered email assistant is ready to streamline your inbox and boost productivity.
+          </p>
+          <div className="flex items-center space-x-6 text-slate-400">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Real-time Analytics</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+              <span>Smart Automation</span>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-12 left-12 right-12">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-medium">AI-Powered Insights</p>
+                <p className="text-slate-400 text-sm">Advanced email categorization and prioritization</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
-            <Mail className="h-8 w-8 text-white" />
+      {/* Right side - Login form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-white">
+        <div className="w-full max-w-md space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Sign In</h2>
+            <p className="text-slate-600">Access your email dashboard</p>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            SyncFlo Email Assistant
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Welcome back! Please sign in to your account.
-          </p>
-        </div>
 
-        <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-2xl">
-          <CardHeader className="space-y-1 pb-6">
-            <CardTitle className="text-2xl font-semibold text-center">Sign In</CardTitle>
-            <CardDescription className="text-center">
-              Enter your credentials to access your email dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
                 <Alert className="border-red-200 bg-red-50">
@@ -72,7 +101,7 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
+                <Label htmlFor="email" className="text-sm font-medium text-slate-900">
                   Email Address
                 </Label>
                 <div className="relative">
@@ -90,7 +119,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
+                <Label htmlFor="password" className="text-sm font-medium text-slate-900">
                   Password
                 </Label>
                 <div className="relative">
@@ -153,13 +182,19 @@ export default function LoginPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-            <Sparkles className="h-3 w-3" />
-            Powered by AI for smarter email management
+          <p className="text-sm text-muted-foreground">
+            By signing in, you agree to our{" "}
+            <a href="/terms" className="text-blue-600 hover:text-blue-500 font-medium">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/privacy-policy" className="text-blue-600 hover:text-blue-500 font-medium">
+              Privacy Policy
+            </a>
+            .
           </p>
+        </div>
         </div>
       </div>
     </div>
