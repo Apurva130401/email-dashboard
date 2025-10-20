@@ -206,7 +206,7 @@ const CheckoutPage: React.FC = () => {
                   <Landmark className="h-6 w-6 text-slate-600" />
                   <div className="flex-1">
                     <div className="font-semibold text-slate-800">Razorpay</div>
-                    <div className="text-sm text-slate-500">Pay with India's most popular gateway</div>
+                    <div className="text-sm text-slate-500">Pay with India&apos;s most popular gateway</div>
                   </div>
                 </Label>
               </RadioGroup>
