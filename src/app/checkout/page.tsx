@@ -365,7 +365,7 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex items-start">
                   <MessageSquare className="w-10 h-10 text-slate-400 mr-4 mt-1"/>
                   <div>
-                    <p className="text-sm text-slate-600 italic">"This tool has saved me countless hours. The AI assistant is a game-changer for managing my inbox!"</p>
+                    <p className="text-sm text-slate-600 italic">&quot;This tool has saved me countless hours. The AI assistant is a game-changer for managing my inbox!&quot;</p>
                     <p className="text-sm font-semibold text-slate-700 mt-2">- Alex Doe, Project Manager</p>
                   </div>
                 </div>
