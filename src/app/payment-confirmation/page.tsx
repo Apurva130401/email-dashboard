@@ -1,14 +1,14 @@
 
 "use client";
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const PaymentConfirmationPage: React.FC = () => {
+const PaymentConfirmationContent: React.FC = () => {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get('payment_id');
   const subscriptionId = searchParams.get('subscription_id');
@@ -56,6 +56,14 @@ const PaymentConfirmationPage: React.FC = () => {
         </Button>
       </motion.div>
     </div>
+  );
+};
+
+const PaymentConfirmationPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentConfirmationContent />
+    </Suspense>
   );
 };
 

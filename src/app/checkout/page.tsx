@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSearchParams, useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +55,7 @@ const CheckoutSkeleton: React.FC = () => (
   </div>
 );
 
-const CheckoutPage: React.FC = () => {
+const CheckoutPageContent: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
@@ -392,5 +392,13 @@ const CheckoutPage: React.FC = () => {
     </div>
   );
 }
+
+const CheckoutPage: React.FC = () => {
+  return (
+    <Suspense fallback={<CheckoutSkeleton />}>
+      <CheckoutPageContent />
+    </Suspense>
+  );
+};
 
 export default CheckoutPage;

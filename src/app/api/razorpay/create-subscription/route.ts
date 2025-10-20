@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     notes: {
       reference_id: uuidv4(),
     }
-  } as any;
+  } as const;
 
   try {
     const subscription = await razorpay.subscriptions.create(options);
