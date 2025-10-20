@@ -8,13 +8,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CreditCard, Landmark, Mail, Sparkles, CheckCircle, ShoppingCart, ArrowRight, ArrowLeft, ShieldCheck, MessageSquare, HelpCircle, Loader2 } from "lucide-react";
+import { CreditCard, Landmark, Mail, CheckCircle, ShoppingCart, ArrowRight, ArrowLeft, ShieldCheck, MessageSquare, HelpCircle, Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface RazorpayResponse {
+    razorpay_payment_id: string;
+    razorpay_subscription_id: string;
+}
+
 declare global {
     interface Window {
-        Razorpay: any;
+        Razorpay: {
+            new (options: {
+                key: string;
+                subscription_id: string;
+                name: string;
+                description: string;
+                handler: (response: RazorpayResponse) => void;
+                prefill: Record<string, string>;
+                notes: Record<string, string>;
+                theme: { color: string };
+            }): {
+                open: () => void;
+            };
+        };
     }
 }
 
@@ -102,11 +120,11 @@ const CheckoutPage: React.FC = () => {
       const subscription = await response.json();
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
         subscription_id: subscription.id,
         name: "SyncFlo",
         description: `SyncFlo ${plan.name} Plan`,
-        handler: function (response: any) {
+        handler: function (response: RazorpayResponse) {
           router.push(`/payment-confirmation?payment_id=${response.razorpay_payment_id}&subscription_id=${response.razorpay_subscription_id}`);
         },
         prefill: {},
