@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { fetchAnalyticsStats, fetchLabelStats, fetchEmails } from "@/lib/api";
 import { AnalyticsStats, LabelStats, Email } from "@/lib/types";
-import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users, BarChart as BarChartIcon, Clock, Inbox, Sparkles, MousePointerClick } from "lucide-react";
+import { TrendingUp, Mail, Tag, CheckCircle, AlertTriangle, Users, BarChart as BarChartIcon, Clock, Inbox, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#00C49F'];
@@ -103,14 +103,11 @@ export default function EmailAnalyticsPage() {
   const [labelStats, setLabelStats] = useState<LabelStats[]>([]);
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
   const [isDrafting, setIsDrafting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [engagementRate, setEngagementRate] = useState({ openRate: 0, clickRate: 0, unsubscribeRate: 0 });
 
   const handleGenerateReply = async (email: Email) => {
-    setSelectedEmail(email);
     setIsDialogOpen(true);
     setIsDrafting(true);
     try {
@@ -157,18 +154,6 @@ export default function EmailAnalyticsPage() {
     loadData();
   }, []);
 
-  useEffect(() => {
-    const fetchEngagementData = async () => {
-      // Mock data for now
-      const mockEngagementData = {
-        openRate: 0.25, // 25%
-        clickRate: 0.08, // 8%
-        unsubscribeRate: 0.01, // 1%
-      };
-      setEngagementRate(mockEngagementData);
-    };
-    fetchEngagementData();
-  }, []);
   if (loading) {
     return <SkeletonLoader />;
   }
@@ -206,7 +191,7 @@ export default function EmailAnalyticsPage() {
   }));
 
   const avgProcessingTime = emails.length > 0 ? (
-    emails.reduce((acc, email) => acc + (0), 0) / emails.length
+    emails.reduce((acc) => acc + (0), 0) / emails.length
   ).toFixed(2) : 0;
 
   return (
